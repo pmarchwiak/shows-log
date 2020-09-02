@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
 import showsList from '../data/data.js'
+import moment from 'moment'
 
 export default function Home({ shows }) {
   return (
@@ -15,15 +16,18 @@ export default function Home({ shows }) {
         <h1 className={styles.title}>
         shows list
         </h1>
-
-        <ul>
+        <div className={styles.grid}>
+        <p>
           {shows.map((show) => (
-            <li>
+            <div>
                <Link href='/show/[date]' as={`/show/${show.date}`}>
-               <a>{show.date}</a>
-               </Link> - {show.artists}</li>
+               <a>[{show.displayDate}]</a>
+               </Link>
+               &nbsp;<span className="artist">{show.artists.join(" | ")}</span> at <span className="venue">{show.venue}</span>
+               </div>
           ))}
-        </ul>
+        </p>
+        </div>
         <p className={styles.description}>
           Get started by editing{' '}
           <code className={styles.code}>pages/index.js</code>
@@ -75,9 +79,13 @@ export default function Home({ shows }) {
 }
 
 export async function getStaticProps() {
+  const shows = showsList.reverse().map((show) => {
+    show.displayDate = moment(show.date, "M-DD-YYYY").format("YYYY-MM-DD");
+    return show;
+  });
   return {
     props: {
-      shows: showsList,
+      shows
     },
   }
 }
