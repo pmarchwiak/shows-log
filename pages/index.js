@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import styles from '../styles/Home.module.css'
-import showsData from '../data/data.js'
+import showsList from '../data/data.js'
 
 export default function Home({ shows }) {
   return (
@@ -13,7 +13,7 @@ export default function Home({ shows }) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+        shows list
         </h1>
 
         <ul>
@@ -77,7 +77,7 @@ export default function Home({ shows }) {
 export async function getStaticProps() {
   return {
     props: {
-      shows: showsData.shows,
+      shows: showsList,
     },
   }
 }

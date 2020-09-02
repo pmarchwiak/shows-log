@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import showsData from '../../data/data.js'
+import showsList from '../../data/data.js'
 
 function Page(shows) {
     const router = useRouter()
@@ -19,13 +19,13 @@ function Page(shows) {
   export async function getStaticProps() {
     return {
       props: {
-        shows: showsData.shows,
+        shows: showsList,
       },
     }
   }
 
   export async function getStaticPaths() {
-    const paths = showsData.shows.map((show) => ({
+    const paths = showsList.map((show) => ({
         params: { date: show.date },
       }))
     return {
