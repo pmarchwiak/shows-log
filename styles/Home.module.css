@@ -120,6 +120,10 @@
   align-content: center;
 }
 
+.show {
+  margin-bottom: .3em;
+}
+
 .photoContainer {
   display: flex;
   align-items: center;
