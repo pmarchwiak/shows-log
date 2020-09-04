@@ -1,8 +1,8 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import styles from '../styles/Home.module.css'
-import showsList from '../data/data.js'
-import moment from 'moment'
+import Head from 'next/head';
+import Link from 'next/link';
+import moment from 'moment';
+import styles from '../styles/Home.module.css';
+import { getShowsList } from './data-helpers';
 
 export default function Home({ shows }) {
   return (
@@ -14,22 +14,32 @@ export default function Home({ shows }) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-        shows list
+          shows list
         </h1>
         <div className={styles.grid}>
-        <p>
-          {shows.map((show) => (
-            <div>
-               <Link href='/show/[date]' as={`/show/${show.date}`}>
-               <a>[{show.displayDate}]</a>
-               </Link>
-               &nbsp;<span className="artist">{show.artists.join(" | ")}</span> at <span className="venue">{show.venue}</span>
-               </div>
-          ))}
-        </p>
+          <p>
+            {shows.map((show) => (
+              <div className={styles.show}>
+                <Link href="/show/[date]" as={`/show/${show.date}`}>
+               <a>
+                 [
+                 {show.displayDate}
+                 ]
+               </a>
+                </Link>
+                {' '}
+                <span className="artist">{show.artists.join(' | ')}</span>
+                {' '}
+                at
+                {' '}
+                <span className="venue">{show.venue}</span>
+              </div>
+            ))}
+          </p>
         </div>
         <p className={styles.description}>
-          Get started by editing{' '}
+          Get started by editing
+          {' '}
           <code className={styles.code}>pages/index.js</code>
         </p>
 
@@ -37,29 +47,6 @@ export default function Home({ shows }) {
           <a href="https://nextjs.org/docs" className={styles.card}>
             <h3>Documentation &rarr;</h3>
             <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
           </a>
         </div>
       </main>
@@ -70,22 +57,23 @@ export default function Home({ shows }) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by
+          {' '}
           <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
         </a>
       </footer>
     </div>
-  )
+  );
 }
 
 export async function getStaticProps() {
-  const shows = showsList.reverse().map((show) => {
-    show.displayDate = moment(show.date, "M-DD-YYYY").format("YYYY-MM-DD");
-    return show;
+  const shows = getShowsList().slice().reverse().map((show) => {
+    const displayDate = moment(show.date, 'M-DD-YYYY').format('YYYY-MM-DD');
+    return { ...show, displayDate };
   });
   return {
     props: {
-      shows
+      shows,
     },
-  }
+  };
 }
