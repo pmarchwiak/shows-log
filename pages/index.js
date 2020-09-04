@@ -3,6 +3,7 @@ import Link from 'next/link';
 import moment from 'moment';
 import styles from '../styles/Home.module.css';
 import { getShowsList } from './data-helpers';
+import { Image } from 'react-feather';
 
 export default function Home({ shows }) {
   return (
@@ -33,6 +34,7 @@ export default function Home({ shows }) {
                 at
                 {' '}
                 <span className="venue">{show.venue}</span>
+                { show.images.length > 0 && <Image /> }
               </div>
             ))}
           </p>
