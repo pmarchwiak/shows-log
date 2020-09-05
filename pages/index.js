@@ -2,10 +2,28 @@ import Head from 'next/head';
 import Link from 'next/link';
 import moment from 'moment';
 import styles from '../styles/Home.module.css';
-import { getShowsList } from './data-helpers';
+import { getShowsList, getAllGenres } from './data-helpers';
 import { Image } from 'react-feather';
+import Dropdown from 'react-dropdown';
+import { useState } from 'react'
 
-export default function Home({ shows }) {
+const ALL_GENRES_VAL = '[all genres]';
+
+export default function Home({ allShows , allGenres }) {
+
+  const [shows, setShows] = useState(allShows)
+
+  function genreSelected(selectedGenre) {
+    const { value, label } = selectedGenre;
+    console.log("selectedGenre",selectedGenre);
+    if (value === ALL_GENRES_VAL) {
+      setShows(allShows);
+    }
+    else {
+      setShows(allShows.filter((s) => s.genres.includes(value)));
+    }
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -17,6 +35,7 @@ export default function Home({ shows }) {
         <h1 className={styles.title}>
           shows list
         </h1>
+        <Dropdown options={allGenres} placeholder={'filter by genre...'} onChange={genreSelected} className='dropdown'/>
         <div className={styles.grid}>
           <p>
             {shows.map((show) => (
@@ -30,11 +49,9 @@ export default function Home({ shows }) {
                 </Link>
                 {' '}
                 <span className="artist">{show.artists.join(' | ')}</span>
-                {' '}
-                at
-                {' '}
+                {' @ '}
                 <span className="venue">{show.venue}</span>
-                { show.images.length > 0 && <Image /> }
+                <span>{' '}{ show.images.length > 0 && <Image /> }</span>
               </div>
             ))}
           </p>
@@ -73,9 +90,12 @@ export async function getStaticProps() {
     const displayDate = moment(show.date, 'M-DD-YYYY').format('YYYY-MM-DD');
     return { ...show, displayDate };
   });
+  console.log("the shows:", shows.slice(0, 10));
+  const allGenres = getAllGenres();
+  allGenres.push(ALL_GENRES_VAL);
   return {
     props: {
-      shows,
+      allShows: shows, allGenres
     },
   };
 }
