@@ -9,10 +9,12 @@
     "convert-tsv": "node scripts/convert-tsv.js"
   },
   "dependencies": {
+    "fs": "0.0.1-security",
     "moment": "^2.27.0",
     "next": "9.5.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-dropdown": "^1.8.0",
     "react-feather": "^2.0.8"
   },
   "devDependencies": {

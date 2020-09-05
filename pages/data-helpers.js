@@ -8,12 +8,19 @@ export function getShowForDate(date) {
 }
 
 export function getAllGenres() {
-  console.log('the showslist', showsList);
   const allGenres = Array.from(new Set(showsList.flatMap((s) => {
     return s.genre.split(',').map((g) => g.trim());
   })));
   console.log('allgenres', allGenres);
   return allGenres.sort();
+}
+
+export function getAllYears() {
+  const allYears = Array.from(new Set(showsList.map((s) => {
+    return s.date.split("-").slice(-1)[0];
+  })));
+  console.log('all years', allYears);
+  return allYears.sort();
 }
 
 export function getShowsByGenre(genre) {

@@ -2,25 +2,36 @@ import Head from 'next/head';
 import Link from 'next/link';
 import moment from 'moment';
 import styles from '../styles/Home.module.css';
-import { getShowsList, getAllGenres } from './data-helpers';
+import { getShowsList, getAllGenres, getAllYears } from './data-helpers';
 import { Image } from 'react-feather';
 import Dropdown from 'react-dropdown';
 import { useState } from 'react'
 
-const ALL_GENRES_VAL = '[all genres]';
+const GENRES_FILTER_RESET = '[all genres]';
+const YEARS_FILTER_RESET = '[all years]';
 
-export default function Home({ allShows , allGenres }) {
+export default function Home({ allShows , allGenres , allYears }) {
 
-  const [shows, setShows] = useState(allShows)
+  const [shows, setShows] = useState(allShows);
 
   function genreSelected(selectedGenre) {
     const { value, label } = selectedGenre;
     console.log("selectedGenre",selectedGenre);
-    if (value === ALL_GENRES_VAL) {
+    if (value === GENRES_FILTER_RESET) {
       setShows(allShows);
     }
     else {
       setShows(allShows.filter((s) => s.genres.includes(value)));
+    }
+  };
+
+  function yearSelected(selectedYear) {
+    const { value, label } = selectedYear;
+    if (value === YEARS_FILTER_RESET) {
+      setShows(allShows);
+    }
+    else {
+      setShows(allShows.filter((s) => s.date.indexOf(value) > -1));
     }
   };
 
@@ -36,6 +47,7 @@ export default function Home({ allShows , allGenres }) {
           shows list
         </h1>
         <Dropdown options={allGenres} placeholder={'filter by genre...'} onChange={genreSelected} className='dropdown'/>
+        <Dropdown options={allYears} placeholder={'filter by year...'} onChange={yearSelected} className='dropdown'/>
         <div className={styles.grid}>
           <p>
             {shows.map((show) => (
@@ -90,12 +102,15 @@ export async function getStaticProps() {
     const displayDate = moment(show.date, 'M-DD-YYYY').format('YYYY-MM-DD');
     return { ...show, displayDate };
   });
-  console.log("the shows:", shows.slice(0, 10));
+  console.log("shows sample:", shows.slice(0, 5));
   const allGenres = getAllGenres();
-  allGenres.push(ALL_GENRES_VAL);
+  allGenres.push(GENRES_FILTER_RESET);
+
+  const allYears = getAllYears();
+  allYears.push(YEARS_FILTER_RESET);
   return {
     props: {
-      allShows: shows, allGenres
+      allShows: shows, allGenres, allYears
     },
   };
 }
