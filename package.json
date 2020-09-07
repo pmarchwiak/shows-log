@@ -4,14 +4,18 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next export",
+    "lint": "eslint ./pages",
     "start": "next start",
     "convert-tsv": "node scripts/convert-tsv.js"
   },
   "dependencies": {
+    "csv-parse": "^4.12.0",
     "fs": "0.0.1-security",
     "moment": "^2.27.0",
     "next": "9.5.2",
+    "pino": "^6.6.0",
+    "pino-pretty": "^4.2.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-dropdown": "^1.8.0",

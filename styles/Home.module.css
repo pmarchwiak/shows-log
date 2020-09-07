@@ -124,6 +124,10 @@
   margin-bottom: .3em;
 }
 
+.dropdown {
+  color: #a5937d;
+}
+
 .photoContainer {
   display: flex;
   align-items: center;

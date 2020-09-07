@@ -1,65 +1,102 @@
-const parse = require('csv-parse/lib/sync')
+const fs = require('fs');
+const parse = require('csv-parse/lib/sync');
+const path = require('path');
+const pino = require('pino');
+
+const log = pino({
+  prettyPrint: {
+    levelFirst: true,
+    ignore: 'pid,hostname,time',
+  },
+});
+
+function getImagesForDate(date) {
+  const imagesDir = path.join('public/images', date);
+  const filenames = fs.existsSync(imagesDir) ? fs.readdirSync(imagesDir) : [];
+
+  const images = filenames.map((filename) => {
+    const filePath = path.join(imagesDir, filename);
+    console.log('Found image ', filePath);
+    // anything in public dir is accessible as root
+    return `/images/${date}/${filename}`;
+  });
+  return images;
+}
 
 // Make sure we got a filename on the command line.
 if (process.argv.length < 3) {
-    console.log('Usage: node ' + process.argv[1] + ' FILENAME');
-    process.exit(1);
-  }
-  // Read the file and print its contents.
-  var fs = require('fs')
-    , filename = process.argv[2];
-  fs.readFile(filename, 'utf8', function(err, tsvData) {
-    if (err) throw err;
-    console.log('OK: ' + filename);
-    console.log(tsvData);
+  console.log(`Usage: node ${process.argv[1]} FILENAME`);
+  process.exit(1);
+}
 
-    const shows = parse(tsvData, {
-        columns: true,
-        delimiter: "\t",
-        relaxColumnCount: true,
-        skip_empty_lines: true
-      }).map(function(show) {
-        console.log(show.date);
+const filename = process.argv[2];
 
-        show.date = show.date.replace(/\//g, "-");
-        var eventName = "";
-        if (show.artists) {
-            var eventNameDelimIdx = show.artists.indexOf(":");
-            var firstCommaIdx = show.artists.indexOf(",");
-            var artistsStartIdx = 0;
-            if (firstCommaIdx > eventNameDelimIdx) {
-                eventName = show.artists.substr(0, eventNameDelimIdx);
-                artistsStartIdx = eventNameDelimIdx + 1;
-            }
-            const artists = show.artists.substr(artistsStartIdx == -1 ? 0 : artistsStartIdx).split(",")
-                .map(function(artist) {return artist.trim();});
-            console.log(eventName);
-            console.log(artists);
-            show.artists = artists;
+fs.readFile(filename, 'utf8', (err, tsvData) => {
+  if (err) throw err;
+  log.debug(`OK: ${filename}`);
+  log.debug(tsvData);
 
-       }
+  const shows = parse(tsvData, {
+    columns: true,
+    delimiter: '\t',
+    relaxColumnCount: true,
+    skip_empty_lines: true,
+  }).map((show, idx) => {
+    log.debug(show.date);
 
-        return show;
+    if (!show.date || !show.artists) {
+      log.warn(`show or date are null for line ${idx}`, { show });
+      return null;
+    }
 
-      })
-      .filter(function(show) {return show.date.length > 0});
+    let artists = [];
+    if (show.artists) {
+      // Festivals precede the artist list and end with a colon
+      const eventNameDelimIdx = show.artists.indexOf(':');
 
-      console.log(shows);
+      const firstCommaIdx = show.artists.indexOf(',');
+      let artistsStartIdx = 0;
+      if (firstCommaIdx > eventNameDelimIdx) {
+        artistsStartIdx = eventNameDelimIdx + 1;
+      }
+      artists = show.artists.substr(artistsStartIdx === -1 ? 0 : artistsStartIdx).split(',')
+        .map((artist) => artist.trim());
+    }
 
-      // FIXME don't do this.
-      var fileContents = "const showsList = " + JSON.stringify(shows, null, 2);
-      fileContents += "\n";
-      fileContents += "export default showsList"
+    let genres = [];
+    if (show.genres) {
+      genres = show.genres.split(',').map((g) => g.trim());
+    }
 
-        // write JSON string to a file
-        fs.writeFile('data/data.js', fileContents, (err) => {
-            if (err) {
-                throw err;
-            }
-            console.log("JSON data is saved.");
-        });
+    let youtube = '';
+    let link = '';
+    if (show.links) {
+      // assume just one link for now
+      if (show.links.indexOf('youtube.com') >= 0) {
+        youtube = show.links;
+      } else {
+        link = show.links;
+      }
+    }
 
+    const images = getImagesForDate(show.date);
 
+    return {
+      date: show.date, artists, venue: show.venue.trim(), genres, youtube, link, images,
+    };
+  }).filter((s) => s !== null);
 
+  // FIXME too hacky?
+  let fileContents = `const showsList = ${JSON.stringify(shows, null, 2)}`;
+  fileContents += '\n';
+  fileContents += 'export default showsList';
 
+  // write JSON string to a file
+  const filePath = 'data/data.js';
+  fs.writeFile(filePath, fileContents, (writeErr) => {
+    if (writeErr) {
+      throw writeErr;
+    }
+    log.info(`Wrote JSON data to ${filePath}`);
   });
+});
