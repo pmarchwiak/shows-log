@@ -20,6 +20,7 @@ module.exports = {
   rules: {
     'react/jsx-filename-extension': 'off',
     'react/prop-types': 'off',
+    'jsx-a11y/anchor-is-valid': 'off',
   },
   globals: { React: 'writable' },
 };

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Carousel from 'react-images';
 import moment from 'moment';
 import styles from '../../styles/Home.module.css';
 import showsList from '../../data/data';
@@ -7,11 +8,15 @@ import { getShowForDate } from '../../lib/data-helpers';
 function Page(props) {
   const { show } = props;
   const displayDate = moment(show.date, 'YYYY-MM-DD').format('MMMM Do, YYYY');
-  console.log('in Page', show);
+  const galleryImages = show.images.map((img) => (
+    {
+      source: img,
+    }));
 
   return (
     <div>
       <div className={styles.container}>
+        <Link href="/" as="/" className="showLink"><a href="/">[back]</a></Link>
         <h3>
           {displayDate}
           {' at '}
@@ -19,14 +24,9 @@ function Page(props) {
         </h3>
         {show.artists.map((artist) => <div><h2>{artist}</h2></div>)}
         <div className={styles.photoContainer}>
-          {show.images.map((imgPath) => (
-            <div key={imgPath} className={styles.showPhoto}>
-              <img className={styles.showPhoto} alt="a band" src={imgPath} />
-            </div>
-          ))}
+          <Carousel views={galleryImages} />
         </div>
       </div>
-      <Link href="/" as="/" className="showLink"><a href="/">[back]</a></Link>
     </div>
   );
 }

@@ -6,10 +6,11 @@ This is a little statically generated website based on that data.
 
 ## TODO
 - fix static export
-- improved show page layout, including photos
+- improved show page layout
+- have image gallery fit page better
 - stats page
 - video: embed youtube, show video icon
-
+- audio: embed bandcamp
 
 
 =====

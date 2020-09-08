@@ -35,13 +35,13 @@ export default function Home({ allShows, allGenres, allYears }) {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Shows</title>
+        <title>Shows Log</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          shows list
+          Shows Log
         </h1>
         <Dropdown options={allGenres} placeholder="filter by genre..." onChange={genreSelected} className="dropdown" />
         <Dropdown options={allYears} placeholder="filter by year..." onChange={yearSelected} className="dropdown" />
@@ -50,7 +50,7 @@ export default function Home({ allShows, allGenres, allYears }) {
             {shows.map((show) => (
               <div className={styles.show}>
                 <Link href="/show/[date]" as={`/show/${show.date}`} className="showLink">
-                  <a href="/show/[date]">
+                  <a>
                     [
                     {show.date}
                     ]
@@ -62,7 +62,7 @@ export default function Home({ allShows, allGenres, allYears }) {
                 <span className="venue">{show.venue}</span>
                 <span>
                   {' '}
-                  { show.images.length > 0 && <Image /> }
+                  { show.images.length > 0 && <Image size="15" /> }
                 </span>
               </div>
             ))}
