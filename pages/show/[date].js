@@ -12,6 +12,11 @@ function Page(props) {
     {
       source: img,
     }));
+  const carousel = galleryImages.length > 0 ? (
+    <div className={styles.photoContainer}>
+      <Carousel views={galleryImages} />
+    </div>
+  ) : '';
 
   return (
     <div>
@@ -23,9 +28,8 @@ function Page(props) {
           <span className="venue">{show.venue}</span>
         </h3>
         {show.artists.map((artist) => <div><h2>{artist}</h2></div>)}
-        <div className={styles.photoContainer}>
-          <Carousel views={galleryImages} />
-        </div>
+        { }
+        { carousel }
       </div>
     </div>
   );
