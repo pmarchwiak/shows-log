@@ -81,8 +81,10 @@ fs.readFile(filename, 'utf8', (err, tsvData) => {
 
     const images = getImagesForDate(show.date);
 
+    const hasMedia = images.length > 0;
+
     return {
-      date: show.date, artists, venue: show.venue.trim(), genres, youtube, link, images,
+      date: show.date, artists, venue: show.venue.trim(), genres, youtube, link, images, hasMedia,
     };
   }).filter((s) => s !== null);
 

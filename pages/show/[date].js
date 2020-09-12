@@ -21,7 +21,7 @@ function Page(props) {
   return (
     <div>
       <div className={styles.container}>
-        <Link href="/" as="/" className="showLink"><a href="/">[back]</a></Link>
+        <Link href="/" as="/"><a href="/" className="showLink">[back]</a></Link>
         <h3>
           {displayDate}
           {' at '}

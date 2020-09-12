@@ -32,6 +32,11 @@ export default function Home({ allShows, allGenres, allYears }) {
     }
   }
 
+  function mediaSelected(event) {
+    const { checked } = event.target;
+    setShows(allShows.filter((s) => !checked || s.hasMedia));
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -42,13 +47,19 @@ export default function Home({ allShows, allGenres, allYears }) {
         <h1 className={styles.title}>
           Shows Log
         </h1>
-        <Dropdown options={allGenres} placeholder="filter by genre..." onChange={genreSelected} className="dropdown" />
-        <Dropdown options={allYears} placeholder="filter by year..." onChange={yearSelected} className="dropdown" />
+        <div className={styles.filterContainer}>
+          <Dropdown options={allGenres} placeholder="[genre]" onChange={genreSelected} className={styles.dropdown} />
+          <Dropdown options={allYears} placeholder="[year]" onChange={yearSelected} className={styles.dropdown} />
+          <div className={styles.filterCheckbox}>
+            <Image size="15" className={styles.icon} />
+            <input type="checkbox" defaultChecked={false} onChange={mediaSelected} />
+          </div>
+        </div>
         <div className={styles.grid}>
           <p>
             {shows.map((show) => (
               <div className={styles.show}>
-                <Link href="/show/[date]" as={`/show/${show.date}`} className="showLink">
+                <Link href="/show/[date]" as={`/show/${show.date}`}>
                   <a>
                     [
                     {show.date}
@@ -61,7 +72,7 @@ export default function Home({ allShows, allGenres, allYears }) {
                 <span className="venue">{show.venue}</span>
                 <span>
                   {' '}
-                  { show.images.length > 0 && <Image size="15" /> }
+                  { show.images.length > 0 && <Image size="15" className={styles.icon} /> }
                 </span>
               </div>
             ))}
@@ -89,7 +100,7 @@ export async function getStaticProps() {
   allYears.push(YEARS_FILTER_RESET);
   return {
     props: {
-      allShows: shows, allGenres, allYears
+      allShows: shows, allGenres, allYears,
     },
   };
 }

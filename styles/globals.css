@@ -31,7 +31,8 @@ a {
 
 .showLink {
   color: #a5937d;
-  text-decoration: none; 
+  text-decoration: none;
+  margin-top: 1em;
 }
 
 * {

@@ -121,11 +121,22 @@
 }
 
 .show {
-  margin-bottom: .3em;
+  margin: 0 .8em .2em .8em;
 }
 
 .dropdown {
   color: #a5937d;
+}
+
+.filterContainer {
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.filterCheckbox {
+  display: flex;
+  align-items: center;
 }
 
 .photoContainer {
@@ -140,4 +151,12 @@
     width: 100%;
     flex-direction: column;
   }
+}
+
+.grid {
+  background-color: #111;
+}
+
+.icon {
+  margin: 0 .2em 0 .2em;
 }
