@@ -21,13 +21,17 @@ function Page(props) {
   return (
     <div>
       <div className={styles.container}>
-        <Link href="/" as="/"><a href="/" className="showLink">[back]</a></Link>
-        <h3>
-          {displayDate}
-          {' at '}
-          <span className="venue">{show.venue}</span>
-        </h3>
-        {show.artists.map((artist) => <div><h2>{artist}</h2></div>)}
+        <div className="showMetadata">
+          <Link href="/" as="/"><a href="/" className="showLink">[back]</a></Link>
+          <h1 className="show">
+            {displayDate}
+          </h1>
+          <h4 className="venue">{show.venue}</h4>
+          <div className="artistList">
+          {show.artists.map((artist) => <div className="artistListItem"><div>{artist}</div></div>)}
+          </div>
+        </div>
+        { }
         { }
         { carousel }
       </div>

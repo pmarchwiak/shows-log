@@ -4,8 +4,30 @@ I've been keeping a list of shows I've attended in a spreadsheet for a long time
 
 This is a little statically generated website based on that data.
 
+## commands
+Start a dev server:
+```
+npm run-script dev
+```
+
+Run the TSV conversion script:
+```
+node scripts/convert-tsv.js data_file.tsv
+```
+
+Run static export:
+```
+npm run-script build
+```
+
+Deploy the static directory:
+```
+netlify deploy --dir out --prod
+```
+
 ## TODO
 - fix static export
+- clean up css
 - improved show page layout
 - have image gallery fit page better
 - stats page
@@ -16,17 +38,3 @@ This is a little statically generated website based on that data.
 =====
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.

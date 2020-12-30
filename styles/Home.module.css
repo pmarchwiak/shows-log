@@ -124,6 +124,10 @@
   margin: 0 .8em .2em .8em;
 }
 
+.showMetadata {
+  line-height: 1.5;
+}
+
 .dropdown {
   color: #a5937d;
 }
@@ -144,6 +148,8 @@
   align-items: center;
   justify-content: center;
   margin: 10px 10% 10px 10%;
+  height: 50vw;
+  width: 50vw;
 }
 
 @media (max-width: 600px) {
@@ -155,6 +161,9 @@
 
 .grid {
   background-color: #111;
+  background-image: url(/images/paper-texture-bg.jpg);
+  color: #111;
+  line-height: 1.5;
 }
 
 .icon {

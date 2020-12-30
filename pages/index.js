@@ -44,9 +44,11 @@ export default function Home({ allShows, allGenres, allYears }) {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Shows Log
-        </h1>
+        <div className={styles.header}>
+          <h1 className={styles.title}>
+            Shows Log
+          </h1>
+        </div>
         <div className={styles.filterContainer}>
           <Dropdown options={allGenres} placeholder="[genre]" onChange={genreSelected} className={styles.dropdown} />
           <Dropdown options={allYears} placeholder="[year]" onChange={yearSelected} className={styles.dropdown} />
@@ -67,7 +69,7 @@ export default function Home({ allShows, allGenres, allYears }) {
                   </a>
                 </Link>
                 {' '}
-                <span className="artist">{show.artists.join(' | ')}</span>
+                <span className="artist">{show.artists.join(' • ')}</span>
                 {' @ '}
                 <span className="venue">{show.venue}</span>
                 <span>
