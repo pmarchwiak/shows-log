@@ -10,11 +10,17 @@ const log = pino({
   },
 });
 
+function isImageExtension(filename) {
+  const ext = filename.substr(filename.lastIndexOf(".") + 1);
+  const valid = new Set(["png", "jpg", "jpeg"])
+  return valid.has(ext);
+}
+
 function getImagesForDate(date) {
   const imagesDir = path.join('public/images', date);
   const filenames = fs.existsSync(imagesDir) ? fs.readdirSync(imagesDir) : [];
 
-  const images = filenames.map((filename) => {
+  const images = filenames.filter(isImageExtension).map((filename) => {
     const filePath = path.join(imagesDir, filename);
     console.log('Found image ', filePath);
     // anything in public dir is accessible as root
