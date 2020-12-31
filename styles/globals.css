@@ -49,10 +49,12 @@ a {
   font-family: 'Special Elite';
 }
 
-.showLink {
-  color: #561717;
-  text-decoration: none;
+.showMetadata {
   margin-top: 1em;
+}
+.showLink {
+  color: #a5937d;
+  text-decoration: none;
 }
 
 * {
