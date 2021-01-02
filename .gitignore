@@ -32,7 +32,9 @@ yarn-error.log*
 
 # vercel
 .vercel
-public/images/
+public/images/202*/**
+public/images/201*/**
+public/images/200*/**
 
 # Local Netlify folder
 .netlify

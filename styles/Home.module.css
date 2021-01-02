@@ -169,3 +169,7 @@
 .icon {
   margin: 0 .2em 0 .2em;
 }
+
+.githubIcon {
+  max-width: 20px;
+}

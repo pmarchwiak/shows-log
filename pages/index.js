@@ -83,7 +83,10 @@ export default function Home({ allShows, allGenres, allYears }) {
       </main>
 
       <footer className={styles.footer}>
-        <p>Created by Patrick Marchwiak.</p>
+        <span>Created by Patrick Marchwiak. </span>
+          <a href="https://github.com/pmarchwiak/showslog">
+            <img className={styles.githubIcon} src="/images/GitHub-Mark-Light-64px.png"></img>
+          </a>
       </footer>
     </div>
   );
