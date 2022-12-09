@@ -13,11 +13,15 @@ const log = pino({
 function isImageExtension(filename) {
   const ext = filename.substr(filename.lastIndexOf(".") + 1);
   const valid = new Set(["png", "jpg", "jpeg"])
-  return valid.has(ext);
+  return valid.has(ext.toLowerCase());
 }
 
 function getImagesForDate(date) {
   const imagesDir = path.join('public/images', date);
+  if (!fs.existsSync(imagesDir)) {
+    fs.mkdirSync(imagesDir);
+    console.log('Created dir ', imagesDir);
+  }
   const filenames = fs.existsSync(imagesDir) ? fs.readdirSync(imagesDir) : [];
 
   const images = filenames.filter(isImageExtension).map((filename) => {
