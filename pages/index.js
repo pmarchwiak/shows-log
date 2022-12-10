@@ -60,7 +60,7 @@ export default function Home({ allShows, allGenres, allYears }) {
         <div className={styles.grid}>
           <p>
             {shows.map((show) => (
-              <div className={styles.show}>
+              <div key={show.artists + show.venue} className={styles.show}>
                 <Link href="/show/[date]" as={`/show/${show.date}`}>
                   <a>
                     [

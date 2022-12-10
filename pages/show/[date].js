@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import Carousel from 'react-images';
+import { Carousel } from 'react-responsive-carousel';
 import moment from 'moment';
 import styles from '../../styles/Home.module.css';
 import showsList from '../../data/data';
@@ -9,12 +9,15 @@ function Page(props) {
   const { show } = props;
   const displayDate = moment(show.date, 'YYYY-MM-DD').format('MMMM Do, YYYY');
   const galleryImages = show.images.map((img) => (
-    {
-      source: img,
-    }));
+    <div key={img}>
+      <img src={img} alt="todo" />
+    </div>
+  ));
   const carousel = galleryImages.length > 0 ? (
     <div className={styles.photoContainer}>
-      <Carousel views={galleryImages} />
+      <Carousel showStatus={false}>
+        {galleryImages}
+      </Carousel>
     </div>
   ) : '';
 
@@ -28,7 +31,7 @@ function Page(props) {
           </h1>
           <h4 className="venue">{show.venue}</h4>
           <div className="artistList">
-          {show.artists.map((artist) => <div className="artistListItem"><div>{artist}</div></div>)}
+            {show.artists.map((artist) => <div className="artistListItem" key={artist}><div>{artist}</div></div>)}
           </div>
         </div>
         { }
