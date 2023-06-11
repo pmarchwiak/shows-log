@@ -10,6 +10,11 @@ Start a dev server:
 npm run-script dev
 ```
 
+Run the google sheet download script:
+```
+python scripts/gsheet-to-tsv.py
+```
+
 Run the TSV conversion script:
 ```
 node scripts/convert-tsv.js data_file.tsv
