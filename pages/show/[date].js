@@ -15,7 +15,7 @@ function Page(props) {
   ));
   const carousel = galleryImages.length > 0 ? (
     <div className={styles.photoContainer}>
-      <Carousel showStatus={false}>
+      <Carousel showStatus={false} showThumbs={galleryImages.length > 1}>
         {galleryImages}
       </Carousel>
     </div>
