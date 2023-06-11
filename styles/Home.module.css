@@ -81,6 +81,10 @@
   margin-top: 3rem;
 }
 
+.gridChild {
+  margin-top: 5px;
+}
+
 .card {
   margin: 1rem;
   flex-basis: 45%;

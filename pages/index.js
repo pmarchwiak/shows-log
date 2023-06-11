@@ -5,7 +5,7 @@ import { Image } from 'react-feather';
 import Dropdown from 'react-dropdown';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
-import { getShowsList, getAllGenres, getAllYears } from '../lib/data-helpers';
+import { getAllShows, getAllGenres, getAllYears } from '../lib/data-helpers';
 
 const GENRES_FILTER_RESET = '[all genres]';
 const YEARS_FILTER_RESET = '[all years]';
@@ -58,9 +58,9 @@ export default function Home({ allShows, allGenres, allYears }) {
           </div>
         </div>
         <div className={styles.grid}>
-          <p>
+          <div className={styles.gridChild}>
             {shows.map((show) => (
-              <div key={show.artists + show.venue} className={styles.show}>
+              <div key={show.key} className={styles.show}>
                 <Link href="/show/[date]" as={`/show/${show.date}`}>
                   <a>
                     [
@@ -78,7 +78,7 @@ export default function Home({ allShows, allGenres, allYears }) {
                 </span>
               </div>
             ))}
-          </p>
+          </div>
         </div>
       </main>
 
@@ -93,7 +93,7 @@ export default function Home({ allShows, allGenres, allYears }) {
 }
 
 export async function getStaticProps() {
-  const shows = getShowsList().slice().reverse().map((show) => {
+  const shows = getAllShows().slice().reverse().map((show) => {
     const displayDate = moment(show.date, 'M-DD-YYYY').format('YYYY-MM-DD');
     return { ...show, displayDate };
   });
