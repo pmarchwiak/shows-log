@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import moment from 'moment';
 import styles from '../styles/Home.module.css';
-import { getShowsList, getAllGenres, getAllYears, getArtistCounts } from '../lib/data-helpers';
+import { getAllShows, getAllGenres, getAllYears, getArtistCounts } from '../lib/data-helpers';
 
 const GENRES_FILTER_RESET = '[all genres]';
 const YEARS_FILTER_RESET = '[all years]';
@@ -45,7 +45,7 @@ export default function Stats({ allShows, allGenres, allYears, artistCounts }) {
 }
 
 export async function getStaticProps() {
-  const shows = getShowsList().slice().reverse().map((show) => {
+  const shows = getAllShows().slice().reverse().map((show) => {
     const displayDate = moment(show.date, 'M-DD-YYYY').format('YYYY-MM-DD');
     return { ...show, displayDate };
   });
