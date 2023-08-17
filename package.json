@@ -13,13 +13,13 @@
     "csv-parse": "^4.12.0",
     "fs": "0.0.1-security",
     "moment": "^2.27.0",
-    "next": "^10.2.3",
+    "next": "^12.3.4",
     "pino": "^6.6.0",
     "pino-pretty": "^4.2.1",
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-dropdown": "^1.8.0",
-    "react-feather": "^2.0.8",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-dropdown": "^1.11.0",
+    "react-feather": "^2.0.10",
     "react-responsive-carousel": "^3.2.23"
   },
   "devDependencies": {
