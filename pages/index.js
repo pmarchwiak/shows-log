@@ -62,11 +62,9 @@ export default function Home({ allShows, allGenres, allYears }) {
             {shows.map((show) => (
               <div key={show.key} className={styles.show}>
                 <Link href="/show/[date]" as={`/show/${show.date}`}>
-                  <a>
-                    [
-                    {show.date}
-                    ]
-                  </a>
+                  [
+                  {show.date}
+                  ]
                 </Link>
                 {' '}
                 <span className="artist">{show.artists.join(' • ')}</span>

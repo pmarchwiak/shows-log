@@ -25,7 +25,7 @@ function Page(props) {
     <div>
       <div className={styles.container}>
         <div className="showMetadata">
-          <Link href="/" as="/"><a href="/" className="showLink">[back]</a></Link>
+          <Link href="/" as="/" className="showLink">[back]</Link>
           <h1 className="show">
             {displayDate}
           </h1>
