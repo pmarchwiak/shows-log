@@ -16,21 +16,21 @@ function isImageExtension(filename) {
   return valid.has(ext.toLowerCase());
 }
 
-function getImagesForDate(date) {
-  const imagesDir = path.join('public/images', date);
+function getImagePathsForDateAndMkDir(dateDirName) {
+  const imagesDir = path.join('public/images', dateDirName);
   if (!fs.existsSync(imagesDir)) {
     fs.mkdirSync(imagesDir);
     console.log('Created dir ', imagesDir);
   }
   const filenames = fs.existsSync(imagesDir) ? fs.readdirSync(imagesDir) : [];
 
-  const images = filenames.filter(isImageExtension).map((filename) => {
+  const imagePaths = filenames.filter(isImageExtension).map((filename) => {
     const filePath = path.join(imagesDir, filename);
     console.log('Found image ', filePath);
     // anything in public dir is accessible as root
-    return `/images/${date}/${filename}`;
+    return `/images/${dateDirName}/${filename}`;
   });
-  return images;
+  return imagePaths;
 }
 
 // Make sure we got a filename on the command line.
@@ -46,6 +46,7 @@ fs.readFile(filename, 'utf8', (err, tsvData) => {
   log.debug(`OK: ${filename}`);
   log.debug(tsvData);
 
+  const dateCount = {};
   const shows = parse(tsvData, {
     columns: true,
     delimiter: '\t',
@@ -53,6 +54,15 @@ fs.readFile(filename, 'utf8', (err, tsvData) => {
     skip_empty_lines: true,
   }).map((show, idx) => {
     log.debug(show.date);
+
+    // Support multiple shows in one day by adding a suffix
+    let dateId = show.date;
+    if (show.date in dateCount) {
+      dateCount[show.date] += 1;
+      dateId = `${dateId}_${dateCount[show.date]}`;
+    } else {
+      dateCount[show.date] = 1;
+    }
 
     if (!show.date || !show.artists) {
       log.warn(`show or date are null for line ${idx}`, { show });
@@ -89,12 +99,20 @@ fs.readFile(filename, 'utf8', (err, tsvData) => {
       }
     }
 
-    const images = getImagesForDate(show.date);
+    const images = getImagePathsForDateAndMkDir(dateId);
 
     const hasMedia = images.length > 0;
 
     return {
-      date: show.date, artists, venue: show.venue.trim(), genres, youtube, link, images, hasMedia,
+      date: show.date,
+      dateId,
+      artists,
+      venue: show.venue.trim(),
+      genres,
+      youtube,
+      link,
+      images,
+      hasMedia,
     };
   }).filter((s) => s !== null);
 

@@ -1,12 +1,14 @@
 import Head from 'next/head';
 import moment from 'moment';
 import styles from '../styles/Home.module.css';
-import { getAllShows, getAllGenres, getAllYears, getArtistCounts } from '../lib/data-helpers';
+import {
+  getAllShows, getAllGenres, getAllYears, getArtistCounts,
+} from '../lib/data-helpers';
 
 const GENRES_FILTER_RESET = '[all genres]';
 const YEARS_FILTER_RESET = '[all years]';
 
-export default function Stats({ allShows, allGenres, allYears, artistCounts }) {
+export default function Stats({ allShows, artistCounts }) {
   const totalCount = allShows.length;
   const topArtistCounts = artistCounts.slice(0, 10);
   return (
@@ -56,7 +58,7 @@ export async function getStaticProps() {
   allYears.push(YEARS_FILTER_RESET);
 
   const artistCounts = getArtistCounts();
-  console.log("artistCounts", artistCounts);
+  console.log('artistCounts', artistCounts);
   return {
     props: {
       allShows: shows, allGenres, allYears, artistCounts,

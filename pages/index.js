@@ -61,7 +61,7 @@ export default function Home({ allShows, allGenres, allYears }) {
           <div className={styles.gridChild}>
             {shows.map((show) => (
               <div key={show.key} className={styles.show}>
-                <Link href="/show/[date]" as={`/show/${show.date}`}>
+                <Link href="/show/[dateId]" as={`/show/${show.dateId}`}>
                   [
                   {show.date}
                   ]
@@ -82,9 +82,9 @@ export default function Home({ allShows, allGenres, allYears }) {
 
       <footer className={styles.footer}>
         <span>Created by Patrick Marchwiak. </span>
-          <a href="https://github.com/pmarchwiak/showslog">
-            <img className={styles.githubIcon} src="/images/GitHub-Mark-Light-64px.png"></img>
-          </a>
+        <a href="https://github.com/pmarchwiak/showslog">
+          <img className={styles.githubIcon} src="/images/GitHub-Mark-Light-64px.png" alt="github icon" />
+        </a>
       </footer>
     </div>
   );
@@ -95,7 +95,7 @@ export async function getStaticProps() {
     const displayDate = moment(show.date, 'M-DD-YYYY').format('YYYY-MM-DD');
     return { ...show, displayDate };
   });
-  console.log("shows sample:", shows.slice(0, 5));
+  console.log('shows sample:', shows.slice(0, 5));
   const allGenres = getAllGenres();
   allGenres.push(GENRES_FILTER_RESET);
 
