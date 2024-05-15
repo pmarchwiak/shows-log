@@ -8,7 +8,7 @@ body {
   /* font-family: 'Lato', sans-serif; */
   font-family: 'Special Elite', serif;
   background-color: #171717;
-  color: goldenrod;
+  color: #ff8e8e;
 }
 
 h1 {
@@ -44,7 +44,7 @@ h4.venue {
 }
 
 a {
-  color: #561717;
+  color: #804444;
   text-decoration: underline;
   font-family: 'Special Elite';
 }
@@ -59,4 +59,16 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.carouselOverride .carousel .thumb:hover {
+  border: 3px solid #fff;
+}
+
+.carouselOverride .carousel .thumb.selected {
+  border: 3px solid #fff;
+}
+
+.carouselOverride .carousel .thumb {
+  border: 3px solid #333;
 }
