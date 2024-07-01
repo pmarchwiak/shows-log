@@ -11,8 +11,8 @@ const log = pino({
 });
 
 function isImageExtension(filename) {
-  const ext = filename.substr(filename.lastIndexOf(".") + 1);
-  const valid = new Set(["png", "jpg", "jpeg"])
+  const ext = filename.substr(filename.lastIndexOf('.') + 1);
+  const valid = new Set(['png', 'jpg', 'jpeg']);
   return valid.has(ext.toLowerCase());
 }
 

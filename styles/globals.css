@@ -52,6 +52,17 @@ a {
 .showMetadata {
   margin-top: 1em;
 }
+
+.showContainer {
+  padding: 1rem;
+}
+
+
+.imgContainer {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+}
+
 .showLink {
   color: #a5937d;
   text-decoration: none;
