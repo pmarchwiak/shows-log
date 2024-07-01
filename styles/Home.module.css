@@ -155,6 +155,7 @@
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
   -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .photoContainer::-webkit-scrollbar {
