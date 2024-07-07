@@ -38,3 +38,5 @@ public/images/200*/**
 
 # Local Netlify folder
 .netlify
+
+.venv

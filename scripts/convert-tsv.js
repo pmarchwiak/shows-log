@@ -16,7 +16,24 @@ function isImageExtension(filename) {
   return valid.has(ext.toLowerCase());
 }
 
-function getImagePathsForDateAndMkDir(dateDirName) {
+function isGeneratedName(filename) {
+  // Remove file extension if present
+  const nameWithoutExtension = filename.split('.')[0];
+
+  // UUID regex pattern
+  const uuidPattern = /^[0-9a-fA-F-]{5,}/i;
+
+  if (uuidPattern.test(nameWithoutExtension)) {
+    return true;
+  }
+  if (filename.startsWith('IMG') || filename.startsWith('DSC')) {
+    return true;
+  }
+
+  return false;
+}
+
+function getImagesForDateAndMkDir(dateDirName) {
   const imagesDir = path.join('public/images', dateDirName);
   if (!fs.existsSync(imagesDir)) {
     fs.mkdirSync(imagesDir);
@@ -24,13 +41,21 @@ function getImagePathsForDateAndMkDir(dateDirName) {
   }
   const filenames = fs.existsSync(imagesDir) ? fs.readdirSync(imagesDir) : [];
 
-  const imagePaths = filenames.filter(isImageExtension).map((filename) => {
+  const images = filenames.filter(isImageExtension).map((filename) => {
+    let title = null;
+    if (!isGeneratedName(filename)) {
+      title = filename.split('.')[0];
+    }
     const filePath = path.join(imagesDir, filename);
     console.log('Found image ', filePath);
     // anything in public dir is accessible as root
-    return `/images/${dateDirName}/${filename}`;
+
+    return {
+      path: `/images/${dateDirName}/${filename}`,
+      title,
+    };
   });
-  return imagePaths;
+  return images;
 }
 
 // Make sure we got a filename on the command line.
@@ -99,7 +124,7 @@ fs.readFile(filename, 'utf8', (err, tsvData) => {
       }
     }
 
-    const images = getImagePathsForDateAndMkDir(dateId);
+    const images = getImagesForDateAndMkDir(dateId);
 
     const hasMedia = images.length > 0;
 

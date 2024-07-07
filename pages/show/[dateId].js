@@ -8,8 +8,9 @@ function Page(props) {
   const { show } = props;
   const displayDate = moment(show.date, 'YYYY-MM-DD').format('MMMM Do, YYYY');
   const galleryImages = show.images.map((img) => (
-    <div key={img} className="imgContainer">
-      <img src={img} alt="todo" />
+    <div key={img.path} className="imgContainer">
+      <img src={img.path} alt="todo" />
+      <p>{img.title}</p>
     </div>
   ));
 
@@ -41,7 +42,7 @@ function Page(props) {
 export async function getStaticProps(context) {
   const { dateId } = context.params;
   const show = getShowForDateId(dateId);
-  console.log('The show is ', show);
+  // console.log('The show is ', show);
 
   return {
     props: {
