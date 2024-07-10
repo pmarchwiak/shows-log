@@ -61,8 +61,8 @@ export default function Home({ allShows, allGenres, allYears }) {
           <div className={styles.gridChild}>
             {shows.map((show) => (
               <div key={show.key} className={styles.show}>
-                { show.images.length > 0 &&
-                  (
+                { show.images.length > 0
+                  && (
                   <Link href="/show/[dateId]" as={`/show/${show.dateId}`}>
                     [
                     {show.date}
