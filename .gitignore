@@ -40,3 +40,4 @@ public/images/200*/**
 .netlify
 
 .venv
+.idea

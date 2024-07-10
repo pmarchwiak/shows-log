@@ -61,11 +61,15 @@ export default function Home({ allShows, allGenres, allYears }) {
           <div className={styles.gridChild}>
             {shows.map((show) => (
               <div key={show.key} className={styles.show}>
-                <Link href="/show/[dateId]" as={`/show/${show.dateId}`}>
-                  [
-                  {show.date}
-                  ]
-                </Link>
+                { show.images.length > 0 &&
+                  (
+                  <Link href="/show/[dateId]" as={`/show/${show.dateId}`}>
+                    [
+                    {show.date}
+                    ]
+                  </Link>
+                  )}
+                { show.images.length === 0 && `[${show.date}]` }
                 {' '}
                 <span className="artist">{show.artists.join(' • ')}</span>
                 {' @ '}
