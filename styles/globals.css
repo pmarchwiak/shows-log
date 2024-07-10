@@ -63,6 +63,21 @@ a {
   scroll-snap-align: center;
 }
 
+.clickZoom input[type=checkbox] {
+  display: none
+}
+
+.clickZoom img {
+  transition: transform 0.25s ease;
+  cursor: zoom-in
+}
+
+.clickZoom input[type=checkbox]:checked~img {
+  transform: scale(2);
+  cursor: zoom-out;
+  margin: 100px;
+}
+
 .showLink {
   color: #a5937d;
   text-decoration: none;

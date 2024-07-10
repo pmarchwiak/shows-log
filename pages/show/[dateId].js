@@ -8,9 +8,12 @@ function Page(props) {
   const { show } = props;
   const displayDate = moment(show.date, 'YYYY-MM-DD').format('MMMM Do, YYYY');
   const galleryImages = show.images.map((img) => (
-    <div key={img.path} className="imgContainer">
-      <img src={img.path} alt="todo" />
-      <p>{img.title}</p>
+    <div key={img.path} className="imgContainer clickZoom">
+      <label>
+        <input type="checkbox" />
+        <img src={img.path} alt="todo" />
+        <p>{img.title}</p>
+      </label>
     </div>
   ));
 
