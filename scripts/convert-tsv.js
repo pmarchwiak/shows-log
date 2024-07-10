@@ -33,6 +33,13 @@ function isGeneratedName(filename) {
   return false;
 }
 
+/**
+ * turn "title (3)" into "title"
+ */
+function removeTrailingParensNumbers(title) {
+  return title.replace(/\s*\(\d+\)$/, '');
+}
+
 function getImagesForDateAndMkDir(dateDirName) {
   const imagesDir = path.join('public/images', dateDirName);
   if (!fs.existsSync(imagesDir)) {
@@ -45,6 +52,7 @@ function getImagesForDateAndMkDir(dateDirName) {
     let title = null;
     if (!isGeneratedName(filename)) {
       title = filename.split('.')[0];
+      title = removeTrailingParensNumbers(title);
     }
     const filePath = path.join(imagesDir, filename);
     console.log('Found image ', filePath);
