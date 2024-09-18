@@ -9,8 +9,8 @@ function Page(props) {
   const displayDate = moment(show.date, 'YYYY-MM-DD').format('MMMM Do, YYYY');
   const galleryImages = show.images.map((img) => (
     <div key={img.path} className="imgContainer clickZoom">
-      <label htmlFor="cb">
-        <input type="checkbox" />
+      <label htmlFor={`cb-${img.path}`}>
+        <input type="checkbox" id={`cb-${img.path}`} />
         <img src={img.path} alt="todo" />
         <p>{img.title}</p>
       </label>

@@ -99,7 +99,7 @@ export async function getStaticProps() {
     const displayDate = moment(show.date, 'M-DD-YYYY').format('YYYY-MM-DD');
     return { ...show, displayDate };
   });
-  console.log('shows sample:', shows.slice(0, 5));
+  console.log('shows sample:', JSON.stringify(shows.slice(0, 5)));
   const allGenres = getAllGenres();
   allGenres.push(GENRES_FILTER_RESET);
 
