@@ -65,7 +65,32 @@ function getImagesForDateAndMkDir(dateDirName) {
       title,
     };
   });
+
   return images;
+}
+
+// if titles match artist names, have those appear first, in the given artists order
+function sortImagesByArtists(imageObjects, artists) {
+  const sortedImages = [];
+  const imageObjSet = new Set(imageObjects);
+
+  artists.forEach((artist) => {
+    console.log(artist);
+    // find any images that match the title and remove them from the set
+    imageObjSet.forEach((obj) => {
+      if (obj.title && obj.title.toLowerCase() === artist.toLowerCase()) {
+        imageObjSet.delete(obj);
+        sortedImages.push(obj);
+      }
+    });
+  });
+
+  // if there any unmatched images, add them to the end
+  imageObjSet.forEach((obj) => {
+    sortedImages.push(obj);
+  });
+
+  return sortedImages;
 }
 
 if (require.main === module) {
@@ -137,6 +162,8 @@ if (require.main === module) {
 
       const images = getImagesForDateAndMkDir(dateId);
 
+      const sortedImages = sortImagesByArtists(images, artists);
+
       const hasMedia = images.length > 0;
 
       return {
@@ -147,7 +174,7 @@ if (require.main === module) {
         genres,
         youtube,
         link,
-        images,
+        images: sortedImages,
         hasMedia,
       };
     }).filter((s) => s !== null);
@@ -172,4 +199,5 @@ module.exports = {
   isImageExtension,
   isGeneratedName,
   cleanTitle,
+  sortImagesByArtists,
 };
