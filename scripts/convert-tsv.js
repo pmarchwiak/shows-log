@@ -2,6 +2,7 @@ const fs = require('fs');
 const parse = require('csv-parse/lib/sync');
 const path = require('path');
 const pino = require('pino');
+const { exec } = require('child_process');
 
 const log = pino({
   prettyPrint: {
@@ -93,6 +94,58 @@ function sortImagesByArtists(imageObjects, artists) {
   return sortedImages;
 }
 
+function openPhotosAtDate(dateStr) {
+  // Convert date to YYYY-MM-DD format if it's a Date object
+  // Parse the date string as a local date (ignoring time zone)
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const date = new Date(year, month - 1, day); // Month is 0-based in JavaScript Date
+
+  const formattedDate = date.toLocaleDateString('en-US', {
+    year: 'numeric', month: 'long', day: 'numeric',
+  });
+
+  // TODO this sort of works but the "All Photos" menu item
+  // is only available when not viewing a single photo.
+  // Some ways to fix:
+  // - Find some other way to get to a view where the serach bar is available.
+  // - Handle the failure and move to a different view first.
+
+  // AppleScript to open Photos and navigate to the date
+  const appleScript = `
+    tell application "Photos"
+      activate
+      delay 1 -- Wait for Photos to open
+      
+      -- Navigate to Library under Photos menu
+      tell application "System Events"
+        tell process "Photos"
+          click menu item "All Photos" of menu "View" of menu bar 1
+          delay 1
+          keystroke "f" using {command down} -- Open search bar
+          delay 1
+          keystroke "${formattedDate}" -- Enter the formatted date
+          delay 1
+          key code 36 -- Press Enter
+        end tell
+      end tell
+      
+      -- Set the search filter to the specified date
+      search for "${formattedDate}"
+    end tell
+  `;
+
+  // Execute the AppleScript
+  return new Promise((resolve, reject) => {
+    exec(`osascript -e '${appleScript}'`, (error, stdout) => {
+      if (error) {
+        reject(new Error(`Failed to open Photos: ${error.message}`));
+        return;
+      }
+      resolve(stdout);
+    });
+  });
+}
+
 if (require.main === module) {
   // Make sure we got a filename on the command line.
   if (process.argv.length < 3) {
@@ -102,6 +155,7 @@ if (require.main === module) {
 
   const filename = process.argv[2];
 
+  // TODO add a mode to list shows that are missing
   fs.readFile(filename, 'utf8', (err, tsvData) => {
     if (err) throw err;
     log.debug(`OK: ${filename}`);
@@ -192,6 +246,21 @@ if (require.main === module) {
       }
       log.info(`Wrote JSON data to ${filePath}`);
     });
+
+    // TODO update this to show more than one recent date where photos are missing
+    // and allow it to run via a different command line arg
+    const mostRecentMissingPhotos = shows
+      .filter((show) => show && show.images.length === 0)
+      .sort((a, b) => (b.date > a.date ? 1 : -1))[0];
+
+    if (mostRecentMissingPhotos) {
+      console.log(`Most recent date with missing photos: ${mostRecentMissingPhotos.date}`);
+    } else {
+      console.log('All shows have photos.');
+    }
+
+    // Disable this for now until it's less buggy
+    // openPhotosAtDate(mostRecentMissingPhotos.date);
   });
 }
 
