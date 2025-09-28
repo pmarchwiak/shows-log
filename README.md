@@ -4,30 +4,36 @@ I've been keeping a list of shows I've attended in a spreadsheet for a long time
 
 This is a little statically generated website based on that data.
 
+
 ## commands
 Start a dev server:
 ```
-npm run-script dev
+make dev
 ```
 
-Run the google sheet download script:
+Run tests:
 ```
-python scripts/gsheet-to-tsv.py
+make test
 ```
 
-Run the TSV conversion script:
+Download the google sheet as a TSV:
 ```
-node scripts/convert-tsv.js data_file.tsv
+make download
+```
+
+Convert the TSV to a JSON file:
+```
+make convert
 ```
 
 Run static export:
 ```
-npm run-script build
+make build
 ```
 
 Deploy the static directory:
 ```
-netlify deploy --dir out --prod
+make deploy
 ```
 
 ## TODO
@@ -39,7 +45,3 @@ netlify deploy --dir out --prod
 - video: embed youtube, show video icon
 - audio: embed bandcamp
 
-
-=====
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
