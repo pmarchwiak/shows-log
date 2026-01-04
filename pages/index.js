@@ -15,7 +15,6 @@ export default function Home({ allShows, allGenres, allYears }) {
 
   function genreSelected(selectedGenre) {
     const { value } = selectedGenre;
-    console.log('selectedGenre', selectedGenre);
     if (value === GENRES_FILTER_RESET) {
       setShows(allShows);
     } else {
@@ -63,7 +62,7 @@ export default function Home({ allShows, allGenres, allYears }) {
               <div key={show.key} className={styles.show}>
                 { show.images.length > 0
                   && (
-                  <Link href="/show/[dateId]" as={`/show/${show.dateId}`}>
+                  <Link href={`/show/${show.dateId}`}>
                     [
                     {show.date}
                     ]
@@ -99,7 +98,6 @@ export async function getStaticProps() {
     const displayDate = moment(show.date, 'M-DD-YYYY').format('YYYY-MM-DD');
     return { ...show, displayDate };
   });
-  console.log('shows sample:', JSON.stringify(shows.slice(0, 5)));
   const allGenres = getAllGenres();
   allGenres.push(GENRES_FILTER_RESET);
 

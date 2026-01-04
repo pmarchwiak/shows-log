@@ -26,7 +26,7 @@ function Page(props) {
   return (
     <div className="showContainer">
       <div className="showMetadata">
-        <Link href="/" as="/" className="showLink">[back]</Link>
+        <Link href="/" className="showLink">[back]</Link>
         <h1 className="show">
           {displayDate}
         </h1>

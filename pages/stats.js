@@ -58,7 +58,6 @@ export async function getStaticProps() {
   allYears.push(YEARS_FILTER_RESET);
 
   const artistCounts = getArtistCounts();
-  console.log('artistCounts', artistCounts);
   return {
     props: {
       allShows: shows, allGenres, allYears, artistCounts,
