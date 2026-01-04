@@ -22,20 +22,20 @@ export default function Stats({ allShows, artistCounts }) {
           Shows Log Stats
         </h1>
         <div className={styles.grid}>
-          <p>
+          <div key="total-shows">
             <h3>Total Shows:</h3>
-            { totalCount }
-          </p>
-          <p>
+            <p>{totalCount}</p>
+          </div>
+          <div key="top-artists">
             <h3>Top Artists</h3>
             {topArtistCounts.map(([artist, count]) => (
-              <div>
+              <div key={artist}>
                 {artist}
                 {': '}
                 {count}
               </div>
             ))}
-          </p>
+          </div>
         </div>
       </main>
 
