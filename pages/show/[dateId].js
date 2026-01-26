@@ -7,11 +7,34 @@ import { getShowForDateId } from '../../lib/data-helpers';
 function Page(props) {
   const { show } = props;
   const displayDate = moment(show.date, 'YYYY-MM-DD').format('MMMM Do, YYYY');
+  const closeAllZooms = () => {
+    document.querySelectorAll('.clickZoom input[type="checkbox"]:checked').forEach((cb) => {
+      cb.checked = false;
+    });
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      closeAllZooms();
+    }
+  };
+
   const galleryImages = show.images.map((img) => (
     <div key={img.path} className="imgContainer clickZoom">
-      <label htmlFor={`cb-${img.path}`}>
-        <input type="checkbox" id={`cb-${img.path}`} />
-        <img src={img.path} alt="todo" />
+      <input
+        type="checkbox"
+        id={`cb-${img.path}`}
+        onChange={(e) => {
+          if (e.target.checked) {
+            document.addEventListener('keydown', handleKeyDown);
+          } else {
+            document.removeEventListener('keydown', handleKeyDown);
+          }
+        }}
+      />
+      <label htmlFor={`cb-${img.path}`} className="zoomOverlay" aria-label="Close zoomed image" />
+      <label htmlFor={`cb-${img.path}`} className="zoomContent">
+        <img src={img.path} alt={img.title || 'Show photo'} />
         <p>{img.title}</p>
       </label>
     </div>

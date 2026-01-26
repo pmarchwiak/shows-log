@@ -64,19 +64,57 @@ a {
 }
 
 .clickZoom input[type=checkbox] {
-  display: none
+  display: none;
+}
+
+.clickZoom .zoomContent {
+  cursor: zoom-in;
+  display: block;
 }
 
 .clickZoom img {
-  transition: transform 0.25s ease;
-  cursor: zoom-in
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  max-width: 100%;
+  display: block;
 }
 
-.clickZoom input[type=checkbox]:checked~img {
-  transform: scale(2);
-  cursor: zoom-out;
-  margin: 100px;
+/* Hidden overlay by default */
+.clickZoom .zoomOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 999;
+  cursor: pointer;
 }
+
+/* Show overlay when zoomed */
+.clickZoom input[type=checkbox]:checked ~ .zoomOverlay {
+  display: block;
+}
+
+/* Zoomed image styling */
+.clickZoom input[type=checkbox]:checked ~ .zoomContent {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  cursor: zoom-out;
+  text-align: center;
+}
+
+.clickZoom input[type=checkbox]:checked ~ .zoomContent img {
+  max-width: 90vw;
+  max-height: 85vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
 
 .showLink {
   color: #a5937d;
