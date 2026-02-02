@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import moment from 'moment';
-import { Image } from 'react-feather';
+import { Image, Grid, List } from 'react-feather';
 import Dropdown from 'react-dropdown';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
@@ -12,6 +12,21 @@ const YEARS_FILTER_RESET = '[all years]';
 
 export default function Home({ allShows, allGenres, allYears }) {
   const [shows, setShows] = useState(allShows);
+  const [viewMode, setViewMode] = useState('photo');
+
+  const showsWithPhotos = allShows.filter((s) => s.hasMedia);
+
+  const getHeadlinerImage = (show) => {
+    if (show.images.length === 1) return show.images[0];
+
+    const headliner = show.artists[0].toLowerCase().replace(/[^a-z0-9]/g, '');
+    const match = show.images.find((img) => {
+      const titleNormalized = (img.title || img.path).toLowerCase().replace(/[^a-z0-9]/g, '');
+      return titleNormalized.includes(headliner);
+    });
+    return match || show.images[0];
+  };
+
 
   function genreSelected(selectedGenre) {
     const { value } = selectedGenre;
@@ -47,40 +62,85 @@ export default function Home({ allShows, allGenres, allYears }) {
           <h1 className={styles.title}>
             Shows Log
           </h1>
-        </div>
-        <div className={styles.filterContainer}>
-          <Dropdown options={allGenres} placeholder="[genre]" onChange={genreSelected} className={styles.dropdown} />
-          <Dropdown options={allYears} placeholder="[year]" onChange={yearSelected} className={styles.dropdown} />
-          <div className={styles.filterCheckbox}>
-            <Image size="15" className={styles.icon} />
-            <input type="checkbox" defaultChecked={false} onChange={mediaSelected} />
+          <div className={styles.viewToggle}>
+            <button
+              type="button"
+              className={`${styles.viewToggleButton} ${viewMode === 'photo' ? styles.viewToggleButtonActive : ''}`}
+              onClick={() => setViewMode('photo')}
+              aria-label="Photo view"
+            >
+              <Grid size="20" />
+            </button>
+            <button
+              type="button"
+              className={`${styles.viewToggleButton} ${viewMode === 'list' ? styles.viewToggleButtonActive : ''}`}
+              onClick={() => setViewMode('list')}
+              aria-label="List view"
+            >
+              <List size="20" />
+            </button>
           </div>
         </div>
-        <div className={styles.grid}>
-          <div className={styles.gridChild}>
-            {shows.map((show) => (
-              <div key={show.key} className={styles.show}>
-                { show.images.length > 0
-                  && (
-                  <Link href={`/show/${show.dateId}`}>
-                    [
-                    {show.date}
-                    ]
-                  </Link>
-                  )}
-                { show.images.length === 0 && `[${show.date}]` }
-                {' '}
-                <span className="artist">{show.artists.join(' • ')}</span>
-                {' @ '}
-                <span className="venue">{show.venue}</span>
-                <span>
-                  {' '}
-                  { show.images.length > 0 && <Image size="15" className={styles.icon} /> }
-                </span>
+        {viewMode === 'photo' && (
+          <div className={styles.photoGrid}>
+            {showsWithPhotos.map((show) => {
+              const formattedDate = moment(show.date, 'YYYY-MM-DD').format('MMM D, YYYY');
+              const image = getHeadlinerImage(show);
+              return (
+                <Link href={`/show/${show.dateId}`} key={show.key} className={styles.photoCard}>
+                  <div className={styles.photoCardImageWrapper}>
+                    <img
+                      src={image.path}
+                      alt={image.title || `${show.artists.join(', ')} at ${show.venue}`}
+                      className={styles.photoCardImage}
+                    />
+                  </div>
+                  <div className={styles.photoCardInfo}>
+                    <p className={styles.photoCardArtist}>{show.artists[0]}</p>
+                    <p className={styles.photoCardDetails}>{formattedDate} @ {show.venue}</p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+        {viewMode === 'list' && (
+          <>
+            <div className={styles.filterContainer}>
+              <Dropdown options={allGenres} placeholder="[genre]" onChange={genreSelected} className={styles.dropdown} />
+              <Dropdown options={allYears} placeholder="[year]" onChange={yearSelected} className={styles.dropdown} />
+              <div className={styles.filterCheckbox}>
+                <Image size="15" className={styles.icon} />
+                <input type="checkbox" defaultChecked={false} onChange={mediaSelected} />
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
+            <div className={styles.grid}>
+              <div className={styles.gridChild}>
+                {shows.map((show) => (
+                  <div key={show.key} className={styles.show}>
+                    { show.images.length > 0
+                      && (
+                      <Link href={`/show/${show.dateId}`}>
+                        [
+                        {show.date}
+                        ]
+                      </Link>
+                      )}
+                    { show.images.length === 0 && `[${show.date}]` }
+                    {' '}
+                    <span className="artist">{show.artists.join(' • ')}</span>
+                    {' @ '}
+                    <span className="venue">{show.venue}</span>
+                    <span>
+                      {' '}
+                      { show.images.length > 0 && <Image size="15" className={styles.icon} /> }
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </main>
 
       <footer className={styles.footer}>

@@ -203,3 +203,97 @@
 .githubIcon {
   max-width: 20px;
 }
+
+/* View Toggle */
+.viewToggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.viewToggleButton {
+  background: transparent;
+  border: 1px solid #555;
+  color: #888;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.viewToggleButton:hover {
+  border-color: #ff8e8e;
+  color: #ff8e8e;
+}
+
+.viewToggleButtonActive {
+  border-color: #ff8e8e;
+  color: #ff8e8e;
+  background: rgba(255, 142, 142, 0.1);
+}
+
+/* Photo Grid */
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  max-width: 1000px;
+  margin-top: 2rem;
+  padding: 1rem;
+}
+
+.photoCard {
+  display: block;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.photoCardImageWrapper {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.photoCard:hover {
+  transform: scale(1.02);
+}
+
+.photoCardImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photoCardInfo {
+  padding: 0.5rem 0;
+  text-align: left;
+}
+
+.photoCardArtist {
+  color: #ff8e8e;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.photoCardDetails {
+  color: #888;
+  font-size: 0.75rem;
+  margin: 0.2rem 0 0 0;
+}
+
+@media (max-width: 768px) {
+  .photoGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .photoGrid {
+    grid-template-columns: 1fr;
+  }
+}
