@@ -133,18 +133,63 @@
 }
 
 .dropdown {
-  color: #a5937d;
+  color: #888;
+  font-size: 0.9rem;
+  position: relative;
+}
+
+.dropdown :global(.Dropdown-control) {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #888;
+  padding: 0.3rem 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.dropdown :global(.Dropdown-control:hover) {
+  color: #ff8e8e;
+}
+
+.dropdown :global(.Dropdown-arrow) {
+  border-color: #888 transparent transparent;
+  top: 10px;
+}
+
+.dropdown :global(.Dropdown-menu) {
+  background: #1a1a1a;
+  border: 1px solid #555;
+  border-radius: 4px;
+  position: absolute;
+  z-index: 10;
+  min-width: 160px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.dropdown :global(.Dropdown-option) {
+  color: #ccc;
+  padding: 0.4rem 0.8rem;
+}
+
+.dropdown :global(.Dropdown-option:hover),
+.dropdown :global(.Dropdown-option.is-selected) {
+  background: rgba(255, 142, 142, 0.1);
+  color: #ff8e8e;
 }
 
 .filterContainer {
-  width: 70%;
   display: flex;
-  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  align-items: center;
 }
 
 .filterCheckbox {
   display: flex;
   align-items: center;
+  color: #888;
 }
 
 .photoContainer {
@@ -204,35 +249,39 @@
   max-width: 20px;
 }
 
+/* Header */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 /* View Toggle */
 .viewToggle {
   display: flex;
-  gap: 0.5rem;
+  gap: 1.5rem;
   margin-top: 1rem;
+  align-self: center;
 }
 
 .viewToggleButton {
   background: transparent;
-  border: 1px solid #555;
+  border: none;
   color: #888;
-  padding: 0.5rem;
+  padding: 0.3rem 0;
   cursor: pointer;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+  border-bottom: 2px solid transparent;
 }
 
 .viewToggleButton:hover {
-  border-color: #ff8e8e;
   color: #ff8e8e;
 }
 
 .viewToggleButtonActive {
-  border-color: #ff8e8e;
   color: #ff8e8e;
-  background: rgba(255, 142, 142, 0.1);
+  border-bottom-color: #ff8e8e;
 }
 
 /* Photo Grid */

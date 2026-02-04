@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import moment from 'moment';
-import { Image, Grid, List } from 'react-feather';
+import { Image } from 'react-feather';
 import Dropdown from 'react-dropdown';
 import { useState } from 'react';
 import styles from '../styles/Home.module.css';
@@ -49,10 +49,6 @@ export default function Home({ allShows, allGenres, allYears }) {
     }
   }
 
-  function mediaSelected(event) {
-    const { checked } = event.target;
-    setShows(allShows.filter((s) => !checked || s.hasMedia));
-  }
 
   return (
     <div className={styles.container}>
@@ -70,17 +66,15 @@ export default function Home({ allShows, allGenres, allYears }) {
               type="button"
               className={`${styles.viewToggleButton} ${viewMode === 'photo' ? styles.viewToggleButtonActive : ''}`}
               onClick={() => setViewMode('photo')}
-              aria-label="Photo view"
             >
-              <Grid size="20" />
+              Photo Highlights
             </button>
             <button
               type="button"
               className={`${styles.viewToggleButton} ${viewMode === 'list' ? styles.viewToggleButtonActive : ''}`}
               onClick={() => setViewMode('list')}
-              aria-label="List view"
             >
-              <List size="20" />
+              List
             </button>
           </div>
         </div>
@@ -112,10 +106,6 @@ export default function Home({ allShows, allGenres, allYears }) {
             <div className={styles.filterContainer}>
               <Dropdown options={allGenres} placeholder="[genre]" onChange={genreSelected} className={styles.dropdown} />
               <Dropdown options={allYears} placeholder="[year]" onChange={yearSelected} className={styles.dropdown} />
-              <div className={styles.filterCheckbox}>
-                <Image size="15" className={styles.icon} />
-                <input type="checkbox" defaultChecked={false} onChange={mediaSelected} />
-              </div>
             </div>
             <div className={styles.grid}>
               <div className={styles.gridChild}>
