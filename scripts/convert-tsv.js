@@ -38,9 +38,13 @@ function isGeneratedName(filename) {
  * turn "title (3)" into "title"
  *  or
  * "title (DSC233)" into "title"
+ *  or
+ * "title-IMG_123" into "title"
  */
 function cleanTitle(title) {
-  return title.replace(/\s+\(((\d+)|(DSC\d+))\)$/, '');
+  return title
+    .replace(/\s+\(((\d+)|(DSC\d+))\)$/, '')
+    .replace(/[-_ ](IMG|DSC)[-_]?\d+$/i, '');
 }
 
 function getImagesForDateAndMkDir(dateDirName) {
@@ -52,18 +56,22 @@ function getImagesForDateAndMkDir(dateDirName) {
   const filenames = fs.existsSync(imagesDir) ? fs.readdirSync(imagesDir) : [];
 
   const images = filenames.filter(isImageExtension).map((filename) => {
+    const highlight = filename.startsWith('_');
+    const cleanFilename = highlight ? filename.substring(1) : filename;
+
     let title = null;
-    if (!isGeneratedName(filename)) {
-      title = filename.split('.')[0];
+    if (!isGeneratedName(cleanFilename)) {
+      title = cleanFilename.split('.')[0];
       title = cleanTitle(title);
     }
     const filePath = path.join(imagesDir, filename);
-    console.log('Found image ', filePath);
+    console.log('Found image ', filePath, highlight ? '(highlight)' : '');
     // anything in public dir is accessible as root
 
     return {
       path: `/images/${dateDirName}/${filename}`,
       title,
+      highlight,
     };
   });
 
@@ -185,17 +193,26 @@ if (require.main === module) {
       }
 
       let artists = [];
+      let festival = null;
       if (show.artists) {
         // Festivals precede the artist list and end with a colon
         const eventNameDelimIdx = show.artists.indexOf(':');
 
-        const firstCommaIdx = show.artists.indexOf(',');
-        let artistsStartIdx = 0;
-        if (firstCommaIdx > eventNameDelimIdx) {
-          artistsStartIdx = eventNameDelimIdx + 1;
+        let artistsStr = show.artists;
+        if (eventNameDelimIdx !== -1) {
+          const firstDelimIdx = show.artists.indexOf('|') !== -1
+            ? show.artists.indexOf('|') : show.artists.indexOf(',');
+          if (firstDelimIdx > eventNameDelimIdx) {
+            festival = show.artists.substr(0, eventNameDelimIdx).trim();
+            artistsStr = show.artists.substr(eventNameDelimIdx + 1);
+          }
         }
-        artists = show.artists.substr(artistsStartIdx === -1 ? 0 : artistsStartIdx).split(',')
-          .map((artist) => artist.trim());
+
+        // Use | as separator if present, otherwise fall back to comma
+        const separator = artistsStr.includes('|') ? '|' : ',';
+        artists = artistsStr.split(separator)
+          .map((artist) => artist.trim())
+          .filter((artist) => artist.length > 0);
       }
 
       let genres = [];
@@ -224,6 +241,7 @@ if (require.main === module) {
         date: show.date,
         dateId,
         artists,
+        festival,
         venue: show.venue.trim(),
         genres,
         youtube,

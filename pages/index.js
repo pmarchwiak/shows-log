@@ -17,6 +17,9 @@ export default function Home({ allShows, allGenres, allYears }) {
   const showsWithPhotos = allShows.filter((s) => s.hasMedia);
 
   const getHeadlinerImage = (show) => {
+    const highlighted = show.images.find((img) => img.highlight);
+    if (highlighted) return highlighted;
+
     if (show.images.length === 1) return show.images[0];
 
     const headliner = show.artists[0].toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -96,7 +99,7 @@ export default function Home({ allShows, allGenres, allYears }) {
                     />
                   </div>
                   <div className={styles.photoCardInfo}>
-                    <p className={styles.photoCardArtist}>{show.artists[0]}</p>
+                    <p className={styles.photoCardArtist}>{show.festival || show.artists[0]}</p>
                     <p className={styles.photoCardDetails}>{formattedDate} @ {show.venue}</p>
                   </div>
                 </Link>
