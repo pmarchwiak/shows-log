@@ -9,7 +9,7 @@ import { getAllShows, getAllGenres, getAllYears } from '../lib/data-helpers';
 const GENRES_FILTER_RESET = '[all genres]';
 const YEARS_FILTER_RESET = '[all years]';
 
-function FilterDropdown({ options, placeholder, onChange, isOpen, onToggle }) {
+function FilterDropdown({ options, placeholder, selected, onChange, isOpen, onToggle }) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -21,8 +21,6 @@ function FilterDropdown({ options, placeholder, onChange, isOpen, onToggle }) {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, onToggle]);
-
-  const [selected, setSelected] = useState(null);
 
   return (
     <div className={styles.dropdown} ref={ref}>
@@ -41,8 +39,7 @@ function FilterDropdown({ options, placeholder, onChange, isOpen, onToggle }) {
               type="button"
               className={`${styles.dropdownOption} ${selected === option ? styles.dropdownOptionSelected : ''}`}
               onClick={() => {
-                setSelected(option === selected ? null : option);
-                onChange({ value: option });
+                onChange(option);
                 onToggle(false);
               }}
             >
@@ -59,6 +56,8 @@ export default function Home({ allShows, allGenres, allYears }) {
   const [shows, setShows] = useState(allShows);
   const [viewMode, setViewMode] = useState('photo');
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [selectedGenre, setSelectedGenre] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(null);
 
   const showsWithPhotos = allShows.filter((s) => s.hasMedia);
 
@@ -77,20 +76,24 @@ export default function Home({ allShows, allGenres, allYears }) {
   };
 
 
-  function genreSelected(selectedGenre) {
-    const { value } = selectedGenre;
+  function genreSelected(value) {
+    setSelectedYear(null);
     if (value === GENRES_FILTER_RESET) {
+      setSelectedGenre(null);
       setShows(allShows);
     } else {
+      setSelectedGenre(value);
       setShows(allShows.filter((s) => s.genres.includes(value)));
     }
   }
 
-  function yearSelected(selectedYear) {
-    const { value } = selectedYear;
+  function yearSelected(value) {
+    setSelectedGenre(null);
     if (value === YEARS_FILTER_RESET) {
+      setSelectedYear(null);
       setShows(allShows);
     } else {
+      setSelectedYear(value);
       setShows(allShows.filter((s) => s.date.indexOf(value) > -1));
     }
   }
@@ -154,6 +157,7 @@ export default function Home({ allShows, allGenres, allYears }) {
               <FilterDropdown
                 options={allGenres}
                 placeholder="[genre]"
+                selected={selectedGenre}
                 onChange={genreSelected}
                 isOpen={openDropdown === 'genre'}
                 onToggle={(open) => setOpenDropdown(open ? 'genre' : null)}
@@ -161,6 +165,7 @@ export default function Home({ allShows, allGenres, allYears }) {
               <FilterDropdown
                 options={allYears}
                 placeholder="[year]"
+                selected={selectedYear}
                 onChange={yearSelected}
                 isOpen={openDropdown === 'year'}
                 onToggle={(open) => setOpenDropdown(open ? 'year' : null)}
@@ -213,7 +218,7 @@ export async function getStaticProps() {
   const allGenres = getAllGenres();
   allGenres.push(GENRES_FILTER_RESET);
 
-  const allYears = getAllYears();
+  const allYears = getAllYears().sort((a, b) => b.localeCompare(a));
   allYears.push(YEARS_FILTER_RESET);
   return {
     props: {
