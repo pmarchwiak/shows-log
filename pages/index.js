@@ -75,17 +75,11 @@ export default function Home({ allShows, allGenres, allYears }) {
 
   const getHeadlinerImage = (show) => {
     const highlighted = show.images.find((img) => img.highlight);
-    if (highlighted) return highlighted;
-
-    if (show.images.length === 1) return show.images[0];
-
-    const headliner = show.artists[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-    const match = show.images.find((img) => {
-      const titleNormalized = (img.title || img.path).toLowerCase().replace(/[^a-z0-9]/g, '');
-      return titleNormalized.includes(headliner);
-    });
-    return match || show.images[0];
+    return highlighted || show.images[0];
   };
+
+  const thumbPath = (imagePath) =>
+    imagePath.replace(/^\/images\//, '/thumbs/').replace(/\.\w+$/, '.webp');
 
   function updateQuery(params) {
     const query = { ...router.query, ...params };
@@ -151,7 +145,7 @@ export default function Home({ allShows, allGenres, allYears }) {
                 <Link href={`/show/${show.dateId}`} key={show.key} className={styles.photoCard}>
                   <div className={styles.photoCardImageWrapper}>
                     <img
-                      src={image.path}
+                      src={thumbPath(image.path)}
                       alt={image.title || `${show.artists.join(', ')} at ${show.venue}`}
                       className={styles.photoCardImage}
                       loading="lazy"

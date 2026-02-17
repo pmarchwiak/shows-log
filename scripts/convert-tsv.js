@@ -86,8 +86,10 @@ function sortImagesByArtists(imageObjects, artists) {
   artists.forEach((artist) => {
     console.log(artist);
     // find any images that match the title and remove them from the set
+    const normalizedArtist = artist.toLowerCase().replace(/[^a-z0-9]/g, '');
     imageObjSet.forEach((obj) => {
-      if (obj.title && obj.title.toLowerCase() === artist.toLowerCase()) {
+      const normalized = (obj.title || obj.path).toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (normalized.includes(normalizedArtist)) {
         imageObjSet.delete(obj);
         sortedImages.push(obj);
       }

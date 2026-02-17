@@ -10,7 +10,10 @@ download:
 convert:
 	node scripts/convert-tsv.js "$(shell ls -rt data/*tsv | tail -n 1)"
 
-build:
+thumbs:
+	uv run scripts/generate-thumbs.py
+
+build: thumbs
 	npm run-script build
 
 deploy:
