@@ -2,17 +2,63 @@ import Head from 'next/head';
 import Link from 'next/link';
 import moment from 'moment';
 import { Image } from 'react-feather';
-import Dropdown from 'react-dropdown';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from '../styles/Home.module.css';
 import { getAllShows, getAllGenres, getAllYears } from '../lib/data-helpers';
 
 const GENRES_FILTER_RESET = '[all genres]';
 const YEARS_FILTER_RESET = '[all years]';
 
+function FilterDropdown({ options, placeholder, onChange, isOpen, onToggle }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) {
+        if (isOpen) onToggle(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen, onToggle]);
+
+  const [selected, setSelected] = useState(null);
+
+  return (
+    <div className={styles.dropdown} ref={ref}>
+      <button
+        type="button"
+        className={styles.dropdownControl}
+        onClick={() => onToggle(!isOpen)}
+      >
+        {selected || placeholder}
+      </button>
+      {isOpen && (
+        <div className={styles.dropdownMenu}>
+          {options.map((option) => (
+            <button
+              key={option}
+              type="button"
+              className={`${styles.dropdownOption} ${selected === option ? styles.dropdownOptionSelected : ''}`}
+              onClick={() => {
+                setSelected(option === selected ? null : option);
+                onChange({ value: option });
+                onToggle(false);
+              }}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Home({ allShows, allGenres, allYears }) {
   const [shows, setShows] = useState(allShows);
   const [viewMode, setViewMode] = useState('photo');
+  const [openDropdown, setOpenDropdown] = useState(null);
 
   const showsWithPhotos = allShows.filter((s) => s.hasMedia);
 
@@ -105,8 +151,20 @@ export default function Home({ allShows, allGenres, allYears }) {
         {viewMode === 'list' && (
           <>
             <div className={styles.filterContainer}>
-              <Dropdown options={allGenres} placeholder="[genre]" onChange={genreSelected} className={styles.dropdown} />
-              <Dropdown options={allYears} placeholder="[year]" onChange={yearSelected} className={styles.dropdown} />
+              <FilterDropdown
+                options={allGenres}
+                placeholder="[genre]"
+                onChange={genreSelected}
+                isOpen={openDropdown === 'genre'}
+                onToggle={(open) => setOpenDropdown(open ? 'genre' : null)}
+              />
+              <FilterDropdown
+                options={allYears}
+                placeholder="[year]"
+                onChange={yearSelected}
+                isOpen={openDropdown === 'year'}
+                onToggle={(open) => setOpenDropdown(open ? 'year' : null)}
+              />
             </div>
             <div className={styles.grid}>
               <div className={styles.gridChild}>
