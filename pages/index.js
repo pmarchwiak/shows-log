@@ -90,6 +90,7 @@ export default function Home({ allShows, allGenres, allYears }) {
                       src={image.path}
                       alt={image.title || `${show.artists.join(', ')} at ${show.venue}`}
                       className={styles.photoCardImage}
+                      loading="lazy"
                     />
                   </div>
                   <div className={styles.photoCardInfo}>
