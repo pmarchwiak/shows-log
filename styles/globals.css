@@ -76,7 +76,7 @@ a {
 
 .imgContainer {
   flex: 0 0 auto;
-  scroll-snap-align: center;
+  scroll-snap-align: start;
 }
 
 .clickZoom input[type=checkbox] {
