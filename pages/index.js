@@ -112,6 +112,7 @@ export default function Home({ allShows, allGenres, allYears }) {
     <div className={styles.container}>
       <Head>
         <title>Shows Log</title>
+        <meta name="description" content="A personal log of live shows and concerts with photos." />
       </Head>
 
       <main className={styles.main}>
@@ -138,7 +139,7 @@ export default function Home({ allShows, allGenres, allYears }) {
         </div>
         {viewMode === 'photo' && (
           <div className={styles.photoGrid}>
-            {showsWithPhotos.map((show) => {
+            {showsWithPhotos.map((show, index) => {
               const formattedDate = moment(show.date, 'YYYY-MM-DD').format('MMM D, YYYY');
               const image = getHeadlinerImage(show);
               return (
@@ -148,7 +149,8 @@ export default function Home({ allShows, allGenres, allYears }) {
                       src={thumbPath(image.path)}
                       alt={image.title || `${show.artists.join(', ')} at ${show.venue}`}
                       className={styles.photoCardImage}
-                      loading="lazy"
+                      loading={index < 2 ? 'eager' : 'lazy'}
+                      {...(index === 0 && { fetchPriority: 'high' })}
                     />
                   </div>
                   <div className={styles.photoCardInfo}>

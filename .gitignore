@@ -35,6 +35,7 @@ yarn-error.log*
 public/images/202*/**
 public/images/201*/**
 public/images/200*/**
+public/thumbs/
 
 # Local Netlify folder
 .netlify

@@ -10,10 +10,9 @@ class MyDocument extends Document {
 
   render() {
     return (
-      <Html>
+      <Html lang="en">
         <Head>
           <link rel="icon" href="/favicon.ico" />
-          <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Josefin+Slab&family=Special+Elite&family=Lato&family=Questrial&display=swap" rel="stylesheet" />
         </Head>
         <body>
           <Main />
