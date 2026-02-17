@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import moment from 'moment';
 import { Image } from 'react-feather';
 import { useState, useRef, useEffect } from 'react';
@@ -52,12 +53,23 @@ function FilterDropdown({ options, placeholder, selected, onChange, isOpen, onTo
   );
 }
 
+function filterShows(allShows, genre, year) {
+  let filtered = allShows;
+  if (genre) filtered = filtered.filter((s) => s.genres.includes(genre));
+  if (year) filtered = filtered.filter((s) => s.date.indexOf(year) > -1);
+  return filtered;
+}
+
 export default function Home({ allShows, allGenres, allYears }) {
-  const [shows, setShows] = useState(allShows);
-  const [viewMode, setViewMode] = useState('photo');
+  const router = useRouter();
+  const { view, genre, year } = router.query;
+
+  const viewMode = view === 'list' ? 'list' : 'photo';
+  const selectedGenre = genre || null;
+  const selectedYear = year || null;
+  const shows = filterShows(allShows, selectedGenre, selectedYear);
+
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [selectedGenre, setSelectedGenre] = useState(null);
-  const [selectedYear, setSelectedYear] = useState(null);
 
   const showsWithPhotos = allShows.filter((s) => s.hasMedia);
 
@@ -75,26 +87,29 @@ export default function Home({ allShows, allGenres, allYears }) {
     return match || show.images[0];
   };
 
+  function updateQuery(params) {
+    const query = { ...router.query, ...params };
+    Object.keys(query).forEach((k) => { if (!query[k]) delete query[k]; });
+    router.push({ pathname: '/', query }, undefined, { shallow: true });
+  }
+
+  function setViewMode(mode) {
+    updateQuery({ view: mode === 'photo' ? undefined : mode });
+  }
 
   function genreSelected(value) {
-    setSelectedYear(null);
     if (value === GENRES_FILTER_RESET) {
-      setSelectedGenre(null);
-      setShows(allShows);
+      updateQuery({ genre: undefined, year: undefined });
     } else {
-      setSelectedGenre(value);
-      setShows(allShows.filter((s) => s.genres.includes(value)));
+      updateQuery({ genre: value, year: undefined });
     }
   }
 
   function yearSelected(value) {
-    setSelectedGenre(null);
     if (value === YEARS_FILTER_RESET) {
-      setSelectedYear(null);
-      setShows(allShows);
+      updateQuery({ genre: undefined, year: undefined });
     } else {
-      setSelectedYear(value);
-      setShows(allShows.filter((s) => s.date.indexOf(value) > -1));
+      updateQuery({ year: value, genre: undefined });
     }
   }
 
