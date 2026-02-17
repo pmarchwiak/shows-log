@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'Archivo Black';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/ArchivoBlack/ArchivoBlack-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Special Elite';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/Special_Elite/SpecialElite-Regular.woff2') format('woff2');
+}
+
 html,
 body {
   padding: 0;
