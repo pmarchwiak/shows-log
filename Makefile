@@ -17,4 +17,4 @@ build: thumbs
 	npm run-script build
 
 deploy:
-	netlify deploy --dir out --prod
+	npx netlify deploy --dir out --prod
