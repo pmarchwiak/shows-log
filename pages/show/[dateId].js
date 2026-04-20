@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import moment from 'moment';
 import styles from '../../styles/Home.module.css';
 import showsList from '../../data/data';
@@ -6,6 +7,7 @@ import { getShowForDateId } from '../../lib/data-helpers';
 
 function Page(props) {
   const { show } = props;
+  const router = useRouter();
   const displayDate = moment(show.date, 'YYYY-MM-DD').format('MMMM Do, YYYY');
   const closeAllZooms = () => {
     document.querySelectorAll('.clickZoom input[type="checkbox"]:checked').forEach((cb) => {
@@ -49,7 +51,7 @@ function Page(props) {
   return (
     <div className="showContainer">
       <div className="showMetadata">
-        <Link href="/" className="showLink">[back]</Link>
+        <button type="button" className="showLink" onClick={() => router.back()}>[back]</button>
         <h1 className="show">
           {displayDate}
         </h1>
