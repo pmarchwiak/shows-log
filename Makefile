@@ -1,5 +1,5 @@
 dev:
-	npm run-script dev
+	npm run-script dev -- -p 4000
 
 test:
 	npm test
