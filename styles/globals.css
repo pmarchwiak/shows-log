@@ -14,6 +14,22 @@
   src: url('/fonts/Special_Elite/SpecialElite-Regular.woff2') format('woff2');
 }
 
+@font-face {
+  font-family: 'Crimson Pro';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/CrimsonPro/CrimsonPro-Variable.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Crimson Pro';
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/CrimsonPro/CrimsonPro-Italic-Variable.woff2') format('woff2');
+}
+
 html,
 body {
   padding: 0;
@@ -73,6 +89,40 @@ a {
   padding: 1rem;
 }
 
+.journal {
+  max-width: 40em;
+  margin: 2em 0;
+  font-family: 'Crimson Pro', Georgia, serif;
+  font-size: 1.3em;
+  color: #e8d9d3;
+  line-height: 1.6;
+}
+
+.journal p,
+.journal ul,
+.journal ol {
+  margin: 0 0 1em;
+}
+
+.journal > :last-child {
+  margin-bottom: 0;
+}
+
+.journal h1,
+.journal h2,
+.journal h3 {
+  font-family: 'Archivo Black';
+  font-size: .9em;
+  text-transform: uppercase;
+  color: #ff8e8e;
+  padding-bottom: 0;
+  margin: 1.4em 0 .5em;
+}
+
+.journal a {
+  color: #ff8e8e;
+}
+
 
 .imgContainer {
   flex: 0 0 auto;
@@ -86,6 +136,11 @@ a {
 .clickZoom .zoomContent {
   cursor: zoom-in;
   display: block;
+}
+
+.clickZoom .zoomContent p {
+  font-size: .85em;
+  margin-top: .5em;
 }
 
 .clickZoom img {

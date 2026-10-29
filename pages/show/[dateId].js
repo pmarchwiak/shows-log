@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import moment from 'moment';
+import Markdown from 'react-markdown';
 import styles from '../../styles/Home.module.css';
 import showsList from '../../data/data';
 import { getShowForDateId } from '../../lib/data-helpers';
@@ -60,9 +61,12 @@ function Page(props) {
           {show.artists.map((artist) => <div className="artistListItem" key={artist}><div>{artist}</div></div>)}
         </div>
       </div>
-      { }
-      { }
       { carousel }
+      { show.journal && (
+        <div className="journal">
+          <Markdown>{show.journal}</Markdown>
+        </div>
+      )}
     </div>
   );
 }

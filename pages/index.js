@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import moment from 'moment';
-import { Image } from 'react-feather';
+import { Book, Image } from 'react-feather';
 import { useState, useRef, useEffect } from 'react';
 import styles from '../styles/Home.module.css';
 import { getAllShows, getAllGenres, getAllYears } from '../lib/data-helpers';
@@ -79,7 +79,7 @@ export default function Home({ allShows, allGenres, allYears }) {
   };
 
   const thumbPath = (imagePath) =>
-    imagePath.replace(/^\/images\//, '/thumbs/').replace(/\.\w+$/, '.webp');
+    imagePath.replace(/^\/content\//, '/thumbs/').replace(/\.\w+$/, '.webp');
 
   function updateQuery(params) {
     const query = { ...router.query, ...params };
@@ -186,7 +186,7 @@ export default function Home({ allShows, allGenres, allYears }) {
               <div className={styles.gridChild}>
                 {shows.map((show) => (
                   <div key={show.key} className={styles.show}>
-                    { show.images.length > 0
+                    { (show.images.length > 0 || show.hasJournal)
                       && (
                       <Link href={`/show/${show.dateId}`}>
                         [
@@ -194,7 +194,7 @@ export default function Home({ allShows, allGenres, allYears }) {
                         ]
                       </Link>
                       )}
-                    { show.images.length === 0 && `[${show.date}]` }
+                    { show.images.length === 0 && !show.hasJournal && `[${show.date}]` }
                     {' '}
                     <span className="artist">{show.artists.join(' • ')}</span>
                     {' @ '}
@@ -202,6 +202,7 @@ export default function Home({ allShows, allGenres, allYears }) {
                     <span>
                       {' '}
                       { show.images.length > 0 && <Image size="15" className={styles.icon} /> }
+                      { show.hasJournal && <Book size="15" className={styles.icon} /> }
                     </span>
                   </div>
                 ))}

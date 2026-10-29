@@ -66,10 +66,10 @@ def main():
         if img is None:
             continue
 
-        # img["path"] is like "/images/2024-07-06/photo.jpeg"
-        rel = Path(img["path"].lstrip("/"))  # "images/2024-07-06/photo.jpeg"
+        # img["path"] is like "/content/2024-07-06-mosswood-meltdown/photo.jpeg"
+        rel = Path(img["path"].lstrip("/"))  # "content/2024-07-06-mosswood-meltdown/photo.jpeg"
         src = images_dir / rel
-        dest = thumbs_dir / Path(*rel.parts[1:]).with_suffix(".webp")  # "thumbs/2024-07-06/photo.webp"
+        dest = thumbs_dir / Path(*rel.parts[1:]).with_suffix(".webp")  # "thumbs/2024-07-06-mosswood-meltdown/photo.webp"
 
         if not src.exists():
             continue

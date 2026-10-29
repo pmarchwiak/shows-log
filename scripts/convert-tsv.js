@@ -3,6 +3,9 @@ const parse = require('csv-parse/lib/sync');
 const path = require('path');
 const pino = require('pino');
 const { exec } = require('child_process');
+const {
+  CONTENT_ROOT, contentDirName, findContentDirs, isDirForDateId,
+} = require('./content-dirs');
 
 const log = pino({
   prettyPrint: {
@@ -47,12 +50,40 @@ function cleanTitle(title) {
     .replace(/[-_ ](IMG|DSC)[-_]?\d+$/i, '');
 }
 
-function getImagesForDateAndMkDir(dateDirName) {
-  const imagesDir = path.join('public/images', dateDirName);
-  if (!fs.existsSync(imagesDir)) {
-    fs.mkdirSync(imagesDir);
-    console.log('Created dir ', imagesDir);
+// find the show's folder in public/content, creating it with the slugged name if missing
+function resolveContentDir(show) {
+  const expected = contentDirName(show);
+  const found = findContentDirs(CONTENT_ROOT, show.dateId);
+
+  if (found.length === 0) {
+    const dir = path.join(CONTENT_ROOT, expected);
+    fs.mkdirSync(dir, { recursive: true });
+    console.log('Created dir ', dir);
+    return expected;
   }
+  if (found.length > 1) {
+    log.warn(`Multiple folders for ${show.dateId}, using ${found[0]}: ${found.join(', ')}`);
+  } else if (found[0] !== expected) {
+    log.warn(`${found[0]} doesn't match expected name ${expected}; run scripts/rename-content-dirs.js`);
+  }
+  return found[0];
+}
+
+function getJournalForDir(dirName, root = CONTENT_ROOT) {
+  const journalPath = path.join(root, dirName, 'journal.md');
+  if (!fs.existsSync(journalPath)) {
+    return null;
+  }
+  const journal = fs.readFileSync(journalPath, 'utf8').trim();
+  if (!journal) {
+    return null;
+  }
+  console.log('Found journal ', journalPath);
+  return journal;
+}
+
+function getImagesForDir(dirName) {
+  const imagesDir = path.join(CONTENT_ROOT, dirName);
   const filenames = fs.existsSync(imagesDir) ? fs.readdirSync(imagesDir) : [];
 
   const images = filenames.filter(isImageExtension).map((filename) => {
@@ -69,7 +100,7 @@ function getImagesForDateAndMkDir(dateDirName) {
     // anything in public dir is accessible as root
 
     return {
-      path: `/images/${dateDirName}/${filename}`,
+      path: `/content/${dirName}/${filename}`,
       title,
       highlight,
     };
@@ -233,11 +264,14 @@ if (require.main === module) {
         }
       }
 
-      const images = getImagesForDateAndMkDir(dateId);
+      const contentDir = resolveContentDir({ dateId, festival, artists });
+      const images = getImagesForDir(contentDir);
 
       const sortedImages = sortImagesByArtists(images, artists);
 
       const hasMedia = images.length > 0;
+
+      const journal = getJournalForDir(contentDir);
 
       return {
         date: show.date,
@@ -248,10 +282,21 @@ if (require.main === module) {
         genres,
         youtube,
         link,
+        contentDir,
         images: sortedImages,
         hasMedia,
+        journal,
+        hasJournal: journal !== null,
       };
     }).filter((s) => s !== null);
+
+    const orphanDirs = !fs.existsSync(CONTENT_ROOT) ? [] : fs.readdirSync(CONTENT_ROOT, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+      .filter((name) => !shows.some((s) => isDirForDateId(name, s.dateId)));
+    if (orphanDirs.length > 0) {
+      log.warn(`Folders with no matching show: ${orphanDirs.join(', ')}`);
+    }
 
     // FIXME too hacky?
     let fileContents = `const showsList = ${JSON.stringify(shows, null, 2)}`;
@@ -289,4 +334,5 @@ module.exports = {
   isGeneratedName,
   cleanTitle,
   sortImagesByArtists,
+  getJournalForDir,
 };
